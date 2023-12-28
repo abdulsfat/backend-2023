@@ -1,62 +1,76 @@
-// TODO 3: Import data students dari folder data/students.js
-const { request } = require("express");
-const students = require("../data/students");
+// import model student
+const Student = require("../models/Student")
 
-// Membuat Class StudentController
 class StudentController {
-  index(req, res) {
-    // TODO 4: Tampilkan data students
-    const data = {
-      message: "Menampilkan data student",
-      data: students,
-    };
+    async index(req, res) {
+        // TODO 4: Tampilkan data students
+        const students = await Student.all();
 
-    res.json(data);
-  }
+        const data = {
+            message: "Menampilkan data student",
+            data: students
+        };
 
-  store(req, res) {
-    // TODO 5: Tambahkan data students
-    students.push(nama);
+        res.status(200).json(data);
+    }
 
-    const data = {
-      message: `Menambahkan data students : ${nama}`,
-      data: students,
-    };
+    async store(req, res) {
+        /**
+         * TODO 2: memanggil method create.
+         * Method create mengembalikan data yang baru diinsert.
+         * Mengembalikan response dalam bentuk json.
+         */
 
-    res.json(data);
-  }
+        const { nama, nim, email, jurusan } = req.body
+        const students = await Student.create(req.body);
+        const data = {
+            message: "Menambahkan data student",
+            data: students
+        };
+
+        res.status(201).json(data);
+    }
+
 
   update(req, res) {
-    const { id } = req.params;
-    const { nama } = req.body;
+      
 
-    // TODO 6: Update data students
 
-    students[id] = nama;
+    
+        const { id } = req.params;
+        const { nama } = req.body;
 
-    const data = {
-      message: `Menambahkan data students id ${id}, nama ${nama}`,
-      data: students,
-    };
+        // TODO 6: Update data students
+        // code here
+        students[id] = nama;
 
-    res.json(data);
-  }
+        const data = {
+            message: `Mengedit data students id ${id}, nama ${nama}`,
+            data: students
+        };
 
-  destroy(req, res) {
-    const { id } = req.params;
+        res.json(data);
+    }
 
-    // TODO 7: Hapus data students
-    const data = {
-      message: `Menghapus data students${id}`,
-      data: students,
-    };
+    destroy(req, res) {
+        const { id } = req.params;
 
-    res.json(data);
-  }
+        // TODO 7: Hapus data students
+        // code here
+
+        students.splice(id, 1);
+
+        const data = {
+            message: `Menghapus data students ${id}`,
+            data: students
+        };
+
+        res.json(data);
+    }
 }
 
-// Membuat object StudentController
+// make an object Student Controller
 const object = new StudentController();
 
-// Export object StudentController
+// export object
 module.exports = object;
